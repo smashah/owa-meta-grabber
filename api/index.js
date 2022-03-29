@@ -2,8 +2,8 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const usage = "https://metagrabber.vercel.app/api?url=https://discord.com"
 
-async function meta(url) {
-      const page = (await axios.get(url)).data;
+async function meta(urrl) {
+      const page = (await axios.get(urrl)).data;
       const $ = cheerio.load(page);
       const title = $('meta[property="og:title"]').attr('content') || $('title').text() || $('meta[name="title"]').attr('content')
       const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content')
