@@ -34,6 +34,9 @@ module.exports = async (request, response) => {
     } catch (error) {
         response.status(400).json({
           "success": false,
+          url,
+          erData: error,
+          erMessage: error.message,
           "error": "The server encountered an error. You may have inputted an invalid query.",
           "usage": usage
        });
