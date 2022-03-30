@@ -13,7 +13,7 @@ async function meta(urrl) {
       image = (image || "").replace(/amp;/g,"");
       const icon = $('link[rel="icon"]').attr('href') || $('link[rel="shortcut icon"]').attr('href')
       const keywords = $('meta[property="og:keywords"]').attr('content') || $('meta[name="keywords"]').attr('content')
-      const json = { title, description, url : url || urrl, site_name, image, icon, keywords };
+      const json = { title, description, url : url || urrl, site_name, image: image || icon, icon, keywords };
       console.log(json)
       return json;
 }
