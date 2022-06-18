@@ -10,9 +10,14 @@ async function meta(urrl) {
       const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content')
       const url = $('meta[property="og:url"]').attr('content')
       const site_name = isAmzn ? "Amazon" : $('meta[property="og:site_name"]').attr('content')
-      let image = isAmzn ? $.html().match(/https:\/\/images-eu.ssl-images-amazon.com\/images\/I\/[^;"]*_.jpg/g).filter(img=>!img.includes(","))[0] : $('meta[property="og:image"]').attr('content') || $('meta[property="og:image:url"]').attr('content')
-      image = (image || "").replace(/amp;/g,"");
+      let image = $('meta[property="og:image"]').attr('content') || $('meta[property="og:image:url"]').attr('content')
+      if(isAmzn) {
+        const amazonImageMatches = $.html().match(/https:\/\/images-eu.ssl-images-amazon.com\/images\/I\/[^;"]*_.jpg/g)
+        if(amazonImageMatches) image = amazonImageMatches.filter(img=>!img.includes(","))[0]
+      }
       const icon = isAmzn ? `https://www.amazon.com/favicon.ico` : $('link[rel="icon"]').attr('href') || $('link[rel="shortcut icon"]').attr('href')
+      if(!image) image = icon
+      image = (image || "").replace(/amp;/g,"");
       const keywords = $('meta[property="og:keywords"]').attr('content') || $('meta[name="keywords"]').attr('content')
       const json = { title, description, url : url || urrl, site_name, image: image || icon, icon, keywords };
       console.log(json)
