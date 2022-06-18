@@ -1,13 +1,20 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
 const usage = "https://metagrabber.vercel.app/api?url=https://discord.com"
+const titleRegexp = /<title>(.*?)<\/title>/g
+const descriptionRegex = /<meta.*name="description" content="([^\>]*)"[^\>]*\/>/g
+// (.exec(s)[1]).replaceAll("&amp;","&")
 
 async function meta(urrl) {
-      const page = (await axios.get(urrl)).data;
+      const page = (await axios.get(urrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36"
+        }
+      })).data;
       const $ = cheerio.load(page);
       const isAmzn = urrl.includes("amazon.") || urrl.includes("amzn.");
-      const title = $('meta[property="og:title"]').attr('content') || $('title').text() || $('meta[name="title"]').attr('content')
-      const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content')
+      const title = $('meta[property="og:title"]').attr('content') || $('title').text() || $('meta[name="title"]').attr('content') || titleRegexp.exec($.html()) && titleRegexp.exec($.html())[1]
+      const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || descriptionRegex.exec($.html()) && descriptionRegex.exec($.html())[1]
       const url = $('meta[property="og:url"]').attr('content')
       const site_name = isAmzn ? "Amazon" : $('meta[property="og:site_name"]').attr('content')
       let image = $('meta[property="og:image"]').attr('content') || $('meta[property="og:image:url"]').attr('content')
@@ -29,6 +36,8 @@ async function meta(urrl) {
  */
 // meta("https://www.amazon.in/gp/product/B0948NNY3W?th=1")
 // meta("https://amzn.to/39jZfzw")
+// meta("https://amzn.to/3HyQ8aQ")
+// meta("https://www.amazon.in/s?i=apparel")
 // meta("https://www.amazon.co.uk/DJI-Mic-Smartphones-Dual-Channel-Transmission/dp/B09GYD9DMZ")
 // meta("https://github.com/open-wa/wa-automate-nodejs")
 
