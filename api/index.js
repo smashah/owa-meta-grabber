@@ -19,7 +19,7 @@ async function meta(urrl) {
       const site_name = isAmzn ? "Amazon" : $('meta[property="og:site_name"]').attr('content')
       let image = $('meta[property="og:image"]').attr('content') || $('meta[property="og:image:url"]').attr('content')
       if(isAmzn) {
-        const amazonImageMatches = $.html().match(/https:\/\/images-eu.ssl-images-amazon.com\/images\/I\/[^;"]*_.jpg/g)
+        const amazonImageMatches = $.html().match(/https:\/\/m.media-amazon.com\/images\/I\/[^;"]*_.jpg/g)
         if(amazonImageMatches) image = amazonImageMatches.filter(img=>!img.includes(","))[0]
       }
       const icon = isAmzn ? `https://www.amazon.com/favicon.ico` : $('link[rel="icon"]').attr('href') || $('link[rel="shortcut icon"]').attr('href')
